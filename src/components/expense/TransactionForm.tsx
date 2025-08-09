@@ -20,12 +20,27 @@ interface TransactionFormProps {
 }
 
 const defaultCategories: Category[] = [
+  // Expense Categories - Popular in India
   { id: '1', name: 'Food & Dining', icon: '🍽️', color: 'hsl(25, 95%, 53%)', type: 'expense' },
   { id: '2', name: 'Transportation', icon: '🚗', color: 'hsl(220, 91%, 60%)', type: 'expense' },
-  { id: '3', name: 'Shopping', icon: '🛍️', color: 'hsl(280, 91%, 60%)', type: 'expense' },
-  { id: '4', name: 'Entertainment', icon: '🎬', color: 'hsl(350, 91%, 60%)', type: 'expense' },
-  { id: '5', name: 'Salary', icon: '💼', color: 'hsl(142, 76%, 36%)', type: 'income' },
-  { id: '6', name: 'Freelance', icon: '💻', color: 'hsl(142, 76%, 36%)', type: 'income' },
+  { id: '3', name: 'Groceries', icon: '🛒', color: 'hsl(142, 50%, 45%)', type: 'expense' },
+  { id: '4', name: 'Utilities & Bills', icon: '⚡', color: 'hsl(45, 91%, 60%)', type: 'expense' },
+  { id: '5', name: 'Rent/EMI', icon: '🏠', color: 'hsl(0, 70%, 55%)', type: 'expense' },
+  { id: '6', name: 'Healthcare', icon: '🏥', color: 'hsl(350, 70%, 60%)', type: 'expense' },
+  { id: '7', name: 'Education', icon: '📚', color: 'hsl(260, 70%, 60%)', type: 'expense' },
+  { id: '8', name: 'Entertainment', icon: '🎬', color: 'hsl(280, 70%, 60%)', type: 'expense' },
+  { id: '9', name: 'Shopping', icon: '🛍️', color: 'hsl(320, 70%, 60%)', type: 'expense' },
+  { id: '10', name: 'Travel', icon: '✈️', color: 'hsl(200, 70%, 60%)', type: 'expense' },
+  { id: '11', name: 'Personal Care', icon: '💅', color: 'hsl(300, 60%, 65%)', type: 'expense' },
+  { id: '12', name: 'Fuel/Petrol', icon: '⛽', color: 'hsl(15, 80%, 55%)', type: 'expense' },
+  
+  // Income Categories
+  { id: '13', name: 'Salary', icon: '💼', color: 'hsl(142, 76%, 36%)', type: 'income' },
+  { id: '14', name: 'Freelance', icon: '💻', color: 'hsl(142, 76%, 45%)', type: 'income' },
+  { id: '15', name: 'Business', icon: '🏢', color: 'hsl(142, 76%, 40%)', type: 'income' },
+  { id: '16', name: 'Investment', icon: '📈', color: 'hsl(142, 76%, 50%)', type: 'income' },
+  { id: '17', name: 'Rental Income', icon: '🏘️', color: 'hsl(142, 76%, 42%)', type: 'income' },
+  { id: '18', name: 'Other Income', icon: '💰', color: 'hsl(142, 76%, 38%)', type: 'income' },
 ];
 
 export function TransactionForm({ onSubmit, categories = defaultCategories, editTransaction, onCancel }: TransactionFormProps) {
@@ -64,21 +79,21 @@ export function TransactionForm({ onSubmit, categories = defaultCategories, edit
   const filteredCategories = categories.filter(cat => cat.type === type || cat.type === 'both');
 
   return (
-    <Card className="w-full max-w-md bg-gradient-card shadow-card">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
+    <Card className="w-full max-w-md bg-gradient-card shadow-card border-0">
+      <CardHeader className="pb-4">
+        <CardTitle className="flex items-center gap-2 text-lg">
           <Plus className="h-5 w-5" />
-          {editTransaction ? 'Edit Transaction' : 'Add Transaction'}
+          {editTransaction ? 'Edit Transaction' : 'Quick Add'}
         </CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="pt-0">
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-2">
             <Button
               type="button"
               variant={type === 'expense' ? 'expense' : 'outline'}
               onClick={() => setType('expense')}
-              className="h-12"
+              className="h-10 text-sm"
             >
               💸 Expense
             </Button>
@@ -86,14 +101,14 @@ export function TransactionForm({ onSubmit, categories = defaultCategories, edit
               type="button"
               variant={type === 'income' ? 'income' : 'outline'}
               onClick={() => setType('income')}
-              className="h-12"
+              className="h-10 text-sm"
             >
               💰 Income
             </Button>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="amount">Amount ($)</Label>
+            <Label htmlFor="amount">Amount (₹)</Label>
             <Input
               id="amount"
               type="number"
@@ -171,9 +186,12 @@ export function TransactionForm({ onSubmit, categories = defaultCategories, edit
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="cash">💵 Cash</SelectItem>
-                <SelectItem value="card">💳 Card</SelectItem>
-                <SelectItem value="bank">🏦 Bank Transfer</SelectItem>
-                <SelectItem value="digital">📱 Digital Wallet</SelectItem>
+                <SelectItem value="upi">📱 UPI</SelectItem>
+                <SelectItem value="card">💳 Debit/Credit Card</SelectItem>
+                <SelectItem value="netbanking">🏦 Net Banking</SelectItem>
+                <SelectItem value="wallet">💳 Digital Wallet</SelectItem>
+                <SelectItem value="rtgs">🏧 RTGS/NEFT</SelectItem>
+                <SelectItem value="cheque">📄 Cheque</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -190,7 +208,7 @@ export function TransactionForm({ onSubmit, categories = defaultCategories, edit
             />
           </div>
 
-          <div className="flex gap-3 pt-4">
+          <div className="flex gap-2 pt-4">
             {editTransaction && onCancel && (
               <Button type="button" variant="outline" onClick={onCancel} className="flex-1">
                 Cancel
@@ -199,7 +217,7 @@ export function TransactionForm({ onSubmit, categories = defaultCategories, edit
             <Button 
               type="submit" 
               variant={type === 'income' ? 'income' : 'expense'}
-              className="flex-1"
+              className="flex-1 h-11"
             >
               {editTransaction ? 'Update' : 'Add'} {type === 'income' ? 'Income' : 'Expense'}
             </Button>

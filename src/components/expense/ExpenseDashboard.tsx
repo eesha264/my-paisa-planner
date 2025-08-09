@@ -6,49 +6,71 @@ import { TrendingUp, TrendingDown, Wallet, Plus, PieChart } from "lucide-react";
 import { StatsCard } from "./StatsCard";
 import { TransactionForm } from "./TransactionForm";
 import { TransactionList } from "./TransactionList";
+import { QuickAddFAB } from "./QuickAddFAB";
+import { MobileBottomNav } from "./MobileBottomNav";
 import { Transaction, MonthlyStats } from "@/types/expense";
 import { format, startOfMonth, endOfMonth, isWithinInterval } from "date-fns";
+import { useIsMobile } from "@/hooks/use-mobile";
 
-// Sample data for demo
+// Sample data for demo - Indian context
 const sampleTransactions: Transaction[] = [
   {
     id: '1',
-    amount: 3500,
+    amount: 75000,
     description: 'Monthly Salary',
     category: 'Salary',
     type: 'income',
     date: new Date(2024, 0, 1),
-    paymentMethod: 'bank',
+    paymentMethod: 'netbanking',
     notes: 'January salary payment'
   },
   {
     id: '2',
-    amount: 85.50,
+    amount: 2850,
     description: 'Grocery Shopping',
-    category: 'Food & Dining',
+    category: 'Groceries',
     type: 'expense',
     date: new Date(2024, 0, 5),
-    paymentMethod: 'card',
-    notes: 'Weekly groceries'
+    paymentMethod: 'upi',
+    notes: 'Weekly groceries from BigBasket'
   },
   {
     id: '3',
-    amount: 1200,
-    description: 'Rent Payment',
-    category: 'Bills',
+    amount: 18000,
+    description: 'House Rent',
+    category: 'Rent/EMI',
     type: 'expense',
     date: new Date(2024, 0, 1),
-    paymentMethod: 'bank',
-    notes: 'Monthly rent'
+    paymentMethod: 'upi',
+    notes: 'Monthly rent payment'
   },
   {
     id: '4',
-    amount: 45.00,
-    description: 'Gas Station',
-    category: 'Transportation',
+    amount: 1200,
+    description: 'Petrol Fill-up',
+    category: 'Fuel/Petrol',
     type: 'expense',
     date: new Date(2024, 0, 8),
     paymentMethod: 'card'
+  },
+  {
+    id: '5',
+    amount: 850,
+    description: 'Auto Rickshaw',
+    category: 'Transportation',
+    type: 'expense',
+    date: new Date(2024, 0, 10),
+    paymentMethod: 'upi',
+    notes: 'Daily commute'
+  },
+  {
+    id: '6',
+    amount: 3200,
+    description: 'Electricity Bill',
+    category: 'Utilities & Bills',
+    type: 'expense',
+    date: new Date(2024, 0, 15),
+    paymentMethod: 'upi'
   }
 ];
 
@@ -56,6 +78,8 @@ export function ExpenseDashboard() {
   const [transactions, setTransactions] = useState<Transaction[]>(sampleTransactions);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
+  const [activeTab, setActiveTab] = useState('home');
+  const isMobile = useIsMobile();
 
   const currentMonth = new Date();
   const monthStart = startOfMonth(currentMonth);
@@ -110,39 +134,41 @@ export function ExpenseDashboard() {
   };
 
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
+    return new Intl.NumberFormat('en-IN', {
       style: 'currency',
-      currency: 'USD'
+      currency: 'INR'
     }).format(amount);
   };
 
   return (
-    <div className="min-h-screen bg-background p-4 space-y-6">
+    <div className={`min-h-screen bg-background ${isMobile ? 'pb-20' : 'p-4'} ${isMobile ? 'px-4 pt-4' : ''} space-y-6`}>
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold bg-gradient-hero bg-clip-text text-transparent">
-            Expense Tracker
+          <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+            💰 Expense Tracker
           </h1>
-          <p className="text-muted-foreground">
+          <p className="text-muted-foreground text-sm sm:text-base">
             Track your finances for {format(currentMonth, 'MMMM yyyy')}
           </p>
         </div>
         
-        <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
-          <DialogTrigger asChild>
-            <Button variant="hero" className="shadow-primary">
-              <Plus className="h-4 w-4" />
-              Add Transaction
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-md">
-            <TransactionForm 
-              onSubmit={handleAddTransaction}
-              categories={[]}
-            />
-          </DialogContent>
-        </Dialog>
+        {!isMobile && (
+          <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
+            <DialogTrigger asChild>
+              <Button variant="hero" className="shadow-primary">
+                <Plus className="h-4 w-4" />
+                Add Transaction
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-md">
+              <TransactionForm 
+                onSubmit={handleAddTransaction}
+                categories={[]}
+              />
+            </DialogContent>
+          </Dialog>
+        )}
       </div>
 
       {/* Stats Grid */}
@@ -181,58 +207,60 @@ export function ExpenseDashboard() {
 
       {/* Quick Actions & Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Quick Add */}
-        <Card className="bg-gradient-card shadow-card hover:shadow-card-hover transition-all duration-200">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Plus className="h-5 w-5" />
-              Quick Add
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <Button 
-              variant="expense" 
-              className="w-full justify-start"
-              onClick={() => setIsFormOpen(true)}
-            >
-              <span className="text-lg mr-2">💸</span>
-              Add Expense
-            </Button>
-            <Button 
-              variant="income" 
-              className="w-full justify-start"
-              onClick={() => setIsFormOpen(true)}
-            >
-              <span className="text-lg mr-2">💰</span>
-              Add Income
-            </Button>
-          </CardContent>
-        </Card>
+        {/* Quick Add - Only show on desktop */}
+        {!isMobile && (
+          <Card className="bg-gradient-card shadow-card hover:shadow-card-hover transition-all duration-200">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Plus className="h-5 w-5" />
+                Quick Add
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <Button 
+                variant="expense" 
+                className="w-full justify-start"
+                onClick={() => setIsFormOpen(true)}
+              >
+                <span className="text-lg mr-2">💸</span>
+                Add Expense
+              </Button>
+              <Button 
+                variant="income" 
+                className="w-full justify-start"
+                onClick={() => setIsFormOpen(true)}
+              >
+                <span className="text-lg mr-2">💰</span>
+                Add Income
+              </Button>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Monthly Overview */}
-        <Card className="lg:col-span-2 bg-gradient-card shadow-card">
+        <Card className={`${!isMobile ? 'lg:col-span-2' : ''} bg-gradient-card shadow-card`}>
           <CardHeader>
-            <CardTitle>Monthly Overview</CardTitle>
+            <CardTitle className="text-lg">Monthly Overview</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
-              <div className="flex justify-between items-center p-4 bg-success/10 rounded-lg border border-success/20">
-                <span className="font-medium">Income</span>
-                <span className="text-lg font-bold text-success">
+            <div className="space-y-3">
+              <div className="flex justify-between items-center p-3 bg-success/10 rounded-lg border border-success/20">
+                <span className="font-medium text-sm">Income</span>
+                <span className="text-base font-bold text-success">
                   {formatCurrency(monthlyStats.totalIncome)}
                 </span>
               </div>
               
-              <div className="flex justify-between items-center p-4 bg-destructive/10 rounded-lg border border-destructive/20">
-                <span className="font-medium">Expenses</span>
-                <span className="text-lg font-bold text-destructive">
+              <div className="flex justify-between items-center p-3 bg-destructive/10 rounded-lg border border-destructive/20">
+                <span className="font-medium text-sm">Expenses</span>
+                <span className="text-base font-bold text-destructive">
                   {formatCurrency(monthlyStats.totalExpenses)}
                 </span>
               </div>
               
-              <div className="flex justify-between items-center p-4 bg-primary/10 rounded-lg border border-primary/20">
-                <span className="font-medium">Net Balance</span>
-                <span className={`text-lg font-bold ${
+              <div className="flex justify-between items-center p-3 bg-primary/10 rounded-lg border border-primary/20">
+                <span className="font-medium text-sm">Net Balance</span>
+                <span className={`text-base font-bold ${
                   monthlyStats.balance > 0 ? 'text-success' : 'text-destructive'
                 }`}>
                   {formatCurrency(monthlyStats.balance)}
@@ -263,6 +291,23 @@ export function ExpenseDashboard() {
           )}
         </DialogContent>
       </Dialog>
+
+      {/* Mobile Quick Add FAB */}
+      {isMobile && (
+        <QuickAddFAB 
+          onAddTransaction={handleAddTransaction}
+          categories={[]}
+        />
+      )}
+
+      {/* Mobile Bottom Navigation */}
+      {isMobile && (
+        <MobileBottomNav
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
+          onQuickAdd={() => setIsFormOpen(true)}
+        />
+      )}
     </div>
   );
 }
