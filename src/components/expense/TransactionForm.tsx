@@ -14,7 +14,7 @@ import { Transaction, Category } from "@/types/expense";
 
 interface TransactionFormProps {
   onSubmit: (transaction: Omit<Transaction, 'id'>) => void;
-  categories: Category[];
+  categories?: Category[];
   editTransaction?: Transaction | null;
   onCancel?: () => void;
 }

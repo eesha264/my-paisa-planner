@@ -10,7 +10,7 @@
 @layer base {
   :root {
     /* Core neutral palette */
-    --background: 220 30% 98%;
+    --background: 210 17% 98%;
     --foreground: 220 20% 10%;
 
     /* Card system with subtle elevation */
@@ -21,9 +21,9 @@
     --popover-foreground: 220 20% 10%;
 
     /* Primary: Modern teal for trust and finance */
-    --primary: 197 92% 48%;
+    --primary: 246 100% 69%;
     --primary-foreground: 0 0% 100%;
-    --primary-glow: 197 92% 60%;
+    --primary-glow: 246 100% 78%;
 
     /* Secondary: Soft blue-gray */
     --secondary: 220 15% 95%;
@@ -34,20 +34,20 @@
     --muted-foreground: 220 10% 45%;
 
     /* Accent: Vibrant blue */
-    --accent: 213 94% 68%;
+    --accent: 347 100% 70%;
     --accent-foreground: 0 0% 100%;
 
     /* Financial colors */
-    --success: 142 76% 36%;
+    --success: 122 39% 49%;
     --success-foreground: 0 0% 100%;
-    --success-glow: 142 76% 48%;
+    --success-glow: 122 39% 60%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
     --destructive-glow: 0 84% 72%;
 
     /* Warning for budgets */
-    --warning: 38 92% 50%;
+    --warning: 45 100% 51%;
     --warning-foreground: 0 0% 100%;
 
     /* UI elements */

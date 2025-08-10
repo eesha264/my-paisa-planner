@@ -133,7 +133,7 @@ export function TransactionList({ transactions, onEdit, onDelete }: TransactionL
                     "font-semibold text-lg",
                     transaction.type === 'income' ? "text-success" : "text-destructive"
                   )}>
-                    {transaction.type === 'income' ? '+' : '-'}${transaction.amount.toFixed(2)}
+                    {transaction.type === 'income' ? '+' : '-'}{new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(transaction.amount)}
                   </p>
                 </div>
                 
