@@ -73,10 +73,7 @@ export function FinanceProvider({ children }: { children: React.ReactNode }) {
     setTheme: (mode) => setSettings((s) => ({ ...s, theme: mode })),
     resetData: () => {
       resetAllData();
-      seedSampleDataIfNeeded();
-      setTransactions(getTransactions());
-      setBudgetState(getBudget());
-      setSettings(getSettings());
+      window.location.reload();
     },
   }), [transactions, budget, settings]);
 

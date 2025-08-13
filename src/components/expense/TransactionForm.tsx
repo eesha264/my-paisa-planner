@@ -20,27 +20,14 @@ interface TransactionFormProps {
 }
 
 const defaultCategories: Category[] = [
-  // Expense Categories - Popular in India
-  { id: '1', name: 'Food & Dining', icon: '🍽️', color: 'hsl(25, 95%, 53%)', type: 'expense' },
-  { id: '2', name: 'Transportation', icon: '🚗', color: 'hsl(220, 91%, 60%)', type: 'expense' },
-  { id: '3', name: 'Groceries', icon: '🛒', color: 'hsl(142, 50%, 45%)', type: 'expense' },
-  { id: '4', name: 'Utilities & Bills', icon: '⚡', color: 'hsl(45, 91%, 60%)', type: 'expense' },
-  { id: '5', name: 'Rent/EMI', icon: '🏠', color: 'hsl(0, 70%, 55%)', type: 'expense' },
-  { id: '6', name: 'Healthcare', icon: '🏥', color: 'hsl(350, 70%, 60%)', type: 'expense' },
-  { id: '7', name: 'Education', icon: '📚', color: 'hsl(260, 70%, 60%)', type: 'expense' },
-  { id: '8', name: 'Entertainment', icon: '🎬', color: 'hsl(280, 70%, 60%)', type: 'expense' },
-  { id: '9', name: 'Shopping', icon: '🛍️', color: 'hsl(320, 70%, 60%)', type: 'expense' },
-  { id: '10', name: 'Travel', icon: '✈️', color: 'hsl(200, 70%, 60%)', type: 'expense' },
-  { id: '11', name: 'Personal Care', icon: '💅', color: 'hsl(300, 60%, 65%)', type: 'expense' },
-  { id: '12', name: 'Fuel/Petrol', icon: '⛽', color: 'hsl(15, 80%, 55%)', type: 'expense' },
-  
-  // Income Categories
-  { id: '13', name: 'Salary', icon: '💼', color: 'hsl(142, 76%, 36%)', type: 'income' },
-  { id: '14', name: 'Freelance', icon: '💻', color: 'hsl(142, 76%, 45%)', type: 'income' },
-  { id: '15', name: 'Business', icon: '🏢', color: 'hsl(142, 76%, 40%)', type: 'income' },
-  { id: '16', name: 'Investment', icon: '📈', color: 'hsl(142, 76%, 50%)', type: 'income' },
-  { id: '17', name: 'Rental Income', icon: '🏘️', color: 'hsl(142, 76%, 42%)', type: 'income' },
-  { id: '18', name: 'Other Income', icon: '💰', color: 'hsl(142, 76%, 38%)', type: 'income' },
+  { id: 'food', name: 'Food', icon: '🍔', color: 'hsl(25, 90%, 85%)', type: 'both' },
+  { id: 'shopping', name: 'Shopping', icon: '🛍️', color: 'hsl(320, 90%, 88%)', type: 'both' },
+  { id: 'given', name: 'Given to Someone', icon: '💸', color: 'hsl(200, 90%, 88%)', type: 'both' },
+  { id: 'rent', name: 'Rent & Bills', icon: '🏠', color: 'hsl(220, 90%, 88%)', type: 'both' },
+  { id: 'entertainment', name: 'Entertainment', icon: '🎯', color: 'hsl(280, 90%, 88%)', type: 'both' },
+  { id: 'travel', name: 'Travel', icon: '🚗', color: 'hsl(200, 80%, 88%)', type: 'both' },
+  { id: 'health', name: 'Health & Medicines', icon: '💊', color: 'hsl(140, 60%, 88%)', type: 'both' },
+  { id: 'education', name: 'Education', icon: '✏️', color: 'hsl(260, 60%, 88%)', type: 'both' },
 ];
 
 export function TransactionForm({ onSubmit, categories = defaultCategories, editTransaction, onCancel }: TransactionFormProps) {
@@ -52,14 +39,16 @@ export function TransactionForm({ onSubmit, categories = defaultCategories, edit
   const [paymentMethod, setPaymentMethod] = useState(editTransaction?.paymentMethod || '');
   const [notes, setNotes] = useState(editTransaction?.notes || '');
 
-  const handleSubmit = (e: React.FormEvent) => {
+const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!amount || !description || !category) return;
+    if (!amount || !description) return;
+
+    const resolvedCategory = category?.trim() ? category : 'Uncategorized';
 
     onSubmit({
       amount: parseFloat(amount),
       description,
-      category,
+      category: resolvedCategory,
       type,
       date,
       paymentMethod,
@@ -134,7 +123,7 @@ export function TransactionForm({ onSubmit, categories = defaultCategories, edit
 
           <div className="space-y-2">
             <Label htmlFor="category">Category</Label>
-            <Select value={category} onValueChange={setCategory} required>
+            <Select value={category} onValueChange={setCategory}>
               <SelectTrigger>
                 <SelectValue placeholder="Select category" />
               </SelectTrigger>

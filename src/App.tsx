@@ -16,7 +16,7 @@ const queryClient = new QueryClient();
 
 function GlobalFAB() {
   const { addTransaction } = useFinance();
-  return <QuickAddFAB onAddTransaction={addTransaction} categories={[]} />;
+  return <QuickAddFAB onAddTransaction={addTransaction} />;
 }
 
 const App = () => (

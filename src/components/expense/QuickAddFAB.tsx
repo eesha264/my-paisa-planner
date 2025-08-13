@@ -9,7 +9,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 
 interface QuickAddFABProps {
   onAddTransaction: (transaction: Omit<Transaction, 'id'>) => void;
-  categories: any[];
+  categories?: any[];
 }
 
 export function QuickAddFAB({ onAddTransaction, categories }: QuickAddFABProps) {

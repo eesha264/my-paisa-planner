@@ -16,7 +16,6 @@ export default function AddExpense() {
         <CardContent>
           <TransactionForm 
             onSubmit={(t) => { addTransaction(t); navigate('/'); }}
-            categories={[]}
           />
         </CardContent>
       </Card>
