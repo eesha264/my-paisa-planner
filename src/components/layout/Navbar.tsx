@@ -1,12 +1,12 @@
 import { Link, NavLink } from "react-router-dom";
 import { PlusCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useFinance } from "@/context/FinanceContext";
+// import { useFinance } from "@/context/FinanceContext";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 export default function Navbar() {
   const isMobile = useIsMobile();
-  const { addTransaction } = useFinance();
+  
 
   return (
     <header className="fixed top-0 left-0 right-0 z-40 border-b bg-background/80 backdrop-blur">
