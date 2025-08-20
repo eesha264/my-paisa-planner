@@ -95,69 +95,160 @@ export default function Dashboard() {
   };
 
   return (
-    <main className={`pt-16 pb-24 px-4 mx-auto max-w-6xl ${isMobile ? '' : ''}`}>
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+    <main className="pt-16 pb-24 px-4 mx-auto max-w-6xl">
+      {/* Stats Cards - Responsive Grid */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6">
         <Card className="bg-gradient-card shadow-card">
-          <CardHeader className="pb-2"><CardTitle className="text-sm">Spent This Month</CardTitle></CardHeader>
-          <CardContent className="text-2xl font-bold text-destructive">{inr(spent)}</CardContent>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-xs sm:text-sm">Spent This Month</CardTitle>
+          </CardHeader>
+          <CardContent className="text-lg sm:text-2xl font-bold text-destructive">{inr(spent)}</CardContent>
         </Card>
         <Card className="bg-gradient-card shadow-card">
-          <CardHeader className="pb-2"><CardTitle className="text-sm">Remaining Budget</CardTitle></CardHeader>
-          <CardContent className="text-2xl font-bold text-warning">{inr(remaining)}</CardContent>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-xs sm:text-sm">Remaining Budget</CardTitle>
+          </CardHeader>
+          <CardContent className="text-lg sm:text-2xl font-bold text-warning">{inr(remaining)}</CardContent>
         </Card>
         <Card className="bg-gradient-card shadow-card">
-          <CardHeader className="pb-2"><CardTitle className="text-sm">Savings</CardTitle></CardHeader>
-          <CardContent className={`text-2xl font-bold ${savings >= 0 ? 'text-success' : 'text-destructive'}`}>{inr(savings)}</CardContent>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-xs sm:text-sm">Savings</CardTitle>
+          </CardHeader>
+          <CardContent className={`text-lg sm:text-2xl font-bold ${savings >= 0 ? 'text-success' : 'text-destructive'}`}>{inr(savings)}</CardContent>
         </Card>
         <Card className="bg-gradient-card shadow-card">
-          <CardHeader className="pb-2"><CardTitle className="text-sm">Transactions</CardTitle></CardHeader>
-          <CardContent className="text-2xl font-bold">{monthTx.length}</CardContent>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-xs sm:text-sm">Transactions</CardTitle>
+          </CardHeader>
+          <CardContent className="text-lg sm:text-2xl font-bold">{monthTx.length}</CardContent>
         </Card>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-4">
-        <Card className="bg-gradient-card shadow-card lg:col-span-1">
-          <CardHeader><CardTitle className="text-sm">Category-wise Spending</CardTitle></CardHeader>
-          <CardContent>
-            <Pie data={pieData} />
+      {/* Charts - Responsive Layout */}
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 mb-6">
+        <Card className="bg-gradient-card shadow-card xl:col-span-1">
+          <CardHeader>
+            <CardTitle className="text-sm sm:text-base">Category-wise Spending</CardTitle>
+          </CardHeader>
+          <CardContent className="h-[250px] sm:h-[300px]">
+            <div className="h-full flex items-center justify-center">
+              <Pie 
+                data={pieData} 
+                options={{
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  plugins: {
+                    legend: {
+                      position: isMobile ? 'bottom' : 'right',
+                      labels: {
+                        boxWidth: 12,
+                        font: {
+                          size: isMobile ? 10 : 12
+                        }
+                      }
+                    }
+                  }
+                }}
+              />
+            </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-card shadow-card lg:col-span-2">
-          <CardHeader><CardTitle className="text-sm">Monthly Spending Trend</CardTitle></CardHeader>
-          <CardContent>
-            <Bar data={barData} />
+        
+        <Card className="bg-gradient-card shadow-card xl:col-span-2">
+          <CardHeader>
+            <CardTitle className="text-sm sm:text-base">Monthly Spending Trend</CardTitle>
+          </CardHeader>
+          <CardContent className="h-[250px] sm:h-[300px]">
+            <div className="h-full">
+              <Bar 
+                data={barData} 
+                options={{
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  plugins: {
+                    legend: {
+                      display: false
+                    }
+                  },
+                  scales: {
+                    y: {
+                      beginAtZero: true,
+                      ticks: {
+                        font: {
+                          size: isMobile ? 10 : 12
+                        }
+                      }
+                    },
+                    x: {
+                      ticks: {
+                        font: {
+                          size: isMobile ? 10 : 12
+                        }
+                      }
+                    }
+                  }
+                }}
+              />
+            </div>
           </CardContent>
         </Card>
       </div>
 
-      <Card className="bg-gradient-card shadow-card mt-4">
-        <CardHeader><CardTitle className="text-sm">Recent Transactions</CardTitle></CardHeader>
-        <CardContent className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead className="text-muted-foreground">
-              <tr className="text-left">
-                <th className="py-2">Date</th>
-                <th className="py-2">Category</th>
-                <th className="py-2">Amount</th>
-                <th className="py-2">Notes</th>
-                <th className="py-2 text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {recent.map(tx => (
-                <tr key={tx.id} className="border-t">
-                  <td className="py-2">{format(new Date(tx.date), 'dd MMM yyyy')}</td>
-                  <td className="py-2">{tx.category}</td>
-                  <td className={`py-2 ${tx.type === 'income' ? 'text-success' : 'text-destructive'}`}>{tx.type === 'income' ? '+' : '-'}{inr(tx.amount)}</td>
-                  <td className="py-2">{tx.notes || '-'}</td>
-                  <td className="py-2 text-right space-x-2">
-                    <Button size="sm" variant="outline" onClick={() => setEditing(tx)}>Edit</Button>
-                    <Button size="sm" variant="destructive" onClick={() => deleteTransaction(tx.id)}>Delete</Button>
-                  </td>
+      {/* Recent Transactions - Responsive Table */}
+      <Card className="bg-gradient-card shadow-card">
+        <CardHeader>
+          <CardTitle className="text-sm sm:text-base">Recent Transactions</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="overflow-x-auto">
+            <table className="w-full text-xs sm:text-sm min-w-[600px]">
+              <thead className="text-muted-foreground">
+                <tr className="text-left border-b">
+                  <th className="py-2 px-1">Date</th>
+                  <th className="py-2 px-1">Category</th>
+                  <th className="py-2 px-1">Amount</th>
+                  <th className="py-2 px-1 hidden sm:table-cell">Notes</th>
+                  <th className="py-2 px-1 text-right">Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {recent.map(tx => (
+                  <tr key={tx.id} className="border-t hover:bg-secondary/50">
+                    <td className="py-3 px-1">
+                      <div className="font-medium">
+                        {format(new Date(tx.date), isMobile ? 'dd/MM' : 'dd MMM yyyy')}
+                      </div>
+                    </td>
+                    <td className="py-3 px-1">
+                      <div className="flex items-center gap-1 max-w-[120px] truncate">
+                        {tx.category}
+                      </div>
+                    </td>
+                    <td className={`py-3 px-1 font-semibold ${tx.type === 'income' ? 'text-success' : 'text-destructive'}`}>
+                      <div className="flex items-center">
+                        {tx.type === 'income' ? '+' : '-'}{inr(tx.amount).replace('₹', '₹')}
+                      </div>
+                    </td>
+                    <td className="py-3 px-1 hidden sm:table-cell">
+                      <div className="max-w-[150px] truncate text-muted-foreground">
+                        {tx.notes || '-'}
+                      </div>
+                    </td>
+                    <td className="py-3 px-1 text-right">
+                      <div className="flex gap-1 justify-end">
+                        <Button size="sm" variant="outline" onClick={() => setEditing(tx)} className="h-7 text-xs">
+                          Edit
+                        </Button>
+                        <Button size="sm" variant="destructive" onClick={() => deleteTransaction(tx.id)} className="h-7 text-xs">
+                          Del
+                        </Button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </CardContent>
       </Card>
 
@@ -175,10 +266,8 @@ export default function Dashboard() {
         </DialogContent>
       </Dialog>
 
-      {/* Floating Quick Add */}
-      {isMobile && (
-        <QuickAddFAB onAddTransaction={addTransaction} categories={[]} />
-      )}
+      {/* Floating Quick Add - Only show on mobile */}
+      <QuickAddFAB onAddTransaction={addTransaction} categories={[]} />
     </main>
   );
 }

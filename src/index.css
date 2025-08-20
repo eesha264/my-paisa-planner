@@ -130,12 +130,91 @@
   }
 }
 
-@layer base {
-  * {
-    @apply border-border;
+/* Responsive utilities and mobile-first design improvements */
+@layer utilities {
+  /* Mobile-first responsive text sizing */
+  .text-responsive-xs { @apply text-xs sm:text-sm; }
+  .text-responsive-sm { @apply text-sm sm:text-base; }
+  .text-responsive-base { @apply text-base sm:text-lg; }
+  .text-responsive-lg { @apply text-lg sm:text-xl; }
+  .text-responsive-xl { @apply text-xl sm:text-2xl; }
+  
+  /* Mobile-friendly padding and margins */
+  .px-mobile { @apply px-3 sm:px-4 md:px-6; }
+  .py-mobile { @apply py-2 sm:py-3 md:py-4; }
+  
+  /* Safe area padding for mobile devices */
+  .safe-area-pb { padding-bottom: env(safe-area-inset-bottom); }
+  .safe-area-pt { padding-top: env(safe-area-inset-top); }
+  
+  /* Improved mobile touch targets */
+  .touch-target { @apply min-h-[44px] min-w-[44px]; }
+  
+  /* Mobile-optimized scrolling */
+  .mobile-scroll { 
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
   }
+  .mobile-scroll::-webkit-scrollbar { display: none; }
+}
 
-  body {
-    @apply bg-background text-foreground;
+/* Enhanced responsive design for better mobile experience */
+@media (max-width: 640px) {
+  .container { @apply px-4; }
+  
+  /* Improve button spacing on mobile */
+  .btn-group > button { @apply mb-2 last:mb-0; }
+  
+  /* Better modal sizing on mobile */
+  .dialog-content { @apply m-4 max-w-[calc(100vw-2rem)]; }
+  
+  /* Mobile-friendly table improvements */
+  .mobile-table { 
+    font-size: 0.75rem;
+    line-height: 1rem;
+  }
+  .mobile-table th, 
+  .mobile-table td { 
+    @apply px-2 py-3; 
+  }
+}
+
+/* Tablet-specific improvements */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .tablet-grid { @apply grid-cols-2; }
+  .tablet-text { @apply text-base; }
+}
+
+/* Enhanced animation utilities for smooth interactions */
+@layer utilities {
+  .animate-fade-in-up {
+    animation: fade-in-up 0.5s ease-out;
+  }
+  
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(1rem);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .animate-slide-down {
+    animation: slide-down 0.3s ease-out;
+  }
+  
+  @keyframes slide-down {
+    from {
+      opacity: 0;
+      transform: translateY(-0.5rem);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 }
