@@ -1,9 +1,10 @@
-import { Transaction } from "@/types/expense";
+import { Transaction, Investment } from "@/types/expense";
 
 const STORAGE_KEYS = {
   transactions: "et.transactions",
   budget: "et.budget",
   settings: "et.settings",
+  investments: "et.investments",
 };
 
 export type ThemeMode = "light" | "dark";
@@ -97,8 +98,31 @@ export function seedSampleDataIfNeeded() {
   saveTransactions(sample);
 }
 
+// Investment storage functions
+function reviveInvestments(raw: any[]): Investment[] {
+  return (raw || []).map((inv) => ({
+    ...inv,
+    date: new Date(inv.date),
+  }));
+}
+
+export function getInvestments(): Investment[] {
+  const raw = localStorage.getItem(STORAGE_KEYS.investments);
+  try {
+    return reviveInvestments(JSON.parse(raw || "[]"));
+  } catch {
+    return [];
+  }
+}
+
+export function saveInvestments(list: Investment[]) {
+  const serializable = list.map((inv) => ({ ...inv, date: inv.date.toISOString() }));
+  localStorage.setItem(STORAGE_KEYS.investments, JSON.stringify(serializable));
+}
+
 export function resetAllData() {
   localStorage.removeItem(STORAGE_KEYS.transactions);
   localStorage.removeItem(STORAGE_KEYS.budget);
   localStorage.removeItem(STORAGE_KEYS.settings);
+  localStorage.removeItem(STORAGE_KEYS.investments);
 }

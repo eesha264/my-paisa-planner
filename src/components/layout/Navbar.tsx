@@ -13,6 +13,7 @@ export default function Navbar() {
   const navItems = [
     { to: "/", label: "Dashboard" },
     { to: "/add", label: "Add Expense" },
+    { to: "/investments", label: "Investments" },
     { to: "/reports", label: "Reports" },
     { to: "/settings", label: "Settings" },
   ];

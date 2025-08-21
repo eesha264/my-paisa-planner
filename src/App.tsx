@@ -8,6 +8,7 @@ import Navbar from "@/components/layout/Navbar";
 import { FinanceProvider, useFinance } from "@/context/FinanceContext";
 import Dashboard from "@/pages/Dashboard";
 import AddExpense from "@/pages/AddExpense";
+import Investments from "@/pages/Investments";
 import Reports from "@/pages/Reports";
 import Settings from "@/pages/Settings";
 import { QuickAddFAB } from "@/components/expense/QuickAddFAB";
@@ -30,6 +31,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/add" element={<AddExpense />} />
+            <Route path="/investments" element={<Investments />} />
             <Route path="/reports" element={<Reports />} />
             <Route path="/settings" element={<Settings />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

@@ -23,3 +23,12 @@ export interface MonthlyStats {
   balance: number;
   transactionCount: number;
 }
+
+export interface Investment {
+  id: string;
+  amount: number;
+  category: string;
+  date: Date;
+  expectedReturn?: number;
+  notes?: string;
+}
